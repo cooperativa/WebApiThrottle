@@ -41,7 +41,7 @@ namespace WebApiThrottle
             return IpAddressParser.GetClientIp(request);
         }
 
-        internal ThrottleLogEntry ComputeLogEntry(string requestId, RequestIdentity identity, ThrottleCounter throttleCounter, string rateLimitPeriod, long rateLimit, HttpRequestMessage request)
+        internal ThrottleLogEntry ComputeLogEntry(string requestId, RequestIdentity identity, ThrottleCounter throttleCounter, string rateLimitPeriod, long rateLimit, decimal warningLevel, HttpRequestMessage request)
         {
             return new ThrottleLogEntry
             {
@@ -54,6 +54,7 @@ namespace WebApiThrottle
                 RequestId = requestId,
                 StartPeriod = throttleCounter.Timestamp,
                 TotalRequests = throttleCounter.TotalRequests,
+                WarningLevel = warningLevel,
                 Request = request
             };
         }

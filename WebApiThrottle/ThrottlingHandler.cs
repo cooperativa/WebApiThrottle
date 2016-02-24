@@ -187,28 +187,31 @@ namespace WebApiThrottle
                     }
 
                     // check if limit is reached
-                    if (throttleCounter.TotalRequests > rateLimit)
+                    if (throttleCounter.TotalRequests > rateLimit * policy.WarningLevel)
                     {
                         // log blocked request
                         if (Logger != null)
                         {
-                            Logger.Log(core.ComputeLogEntry(requestId, identity, throttleCounter, rateLimitPeriod.ToString(), rateLimit, request));
+                            Logger.Log(core.ComputeLogEntry(requestId, identity, throttleCounter, rateLimitPeriod.ToString(), rateLimit, policy.WarningLevel, request));
                         }
 
-                        var message = !string.IsNullOrEmpty(this.QuotaExceededMessage) 
-                            ? this.QuotaExceededMessage 
-                            : "API calls quota exceeded! maximum admitted {0} per {1}.";
+                        if (throttleCounter.TotalRequests > rateLimit)
+                        {
+                            var message = !string.IsNullOrEmpty(this.QuotaExceededMessage)
+                                ? this.QuotaExceededMessage
+                                : "API calls quota exceeded! maximum admitted {0} per {1}.";
 
-                        var content = this.QuotaExceededContent != null
-                            ? this.QuotaExceededContent(rateLimit, rateLimitPeriod)
-                            : string.Format(message, rateLimit, rateLimitPeriod);
+                            var content = this.QuotaExceededContent != null
+                                ? this.QuotaExceededContent(rateLimit, rateLimitPeriod)
+                                : string.Format(message, rateLimit, rateLimitPeriod);
 
-                        // break execution
-                        return QuotaExceededResponse(
-                            request,
-                            content,
-                            QuotaExceededResponseCode,
-                            core.RetryAfterFrom(throttleCounter.Timestamp, rateLimitPeriod));
+                            // break execution
+                            return QuotaExceededResponse(
+                                request,
+                                content,
+                                QuotaExceededResponseCode,
+                                core.RetryAfterFrom(throttleCounter.Timestamp, rateLimitPeriod));
+                        }
                     }
                 }
             }
@@ -227,8 +230,8 @@ namespace WebApiThrottle
             var entry = new RequestIdentity();
             entry.ClientIp = core.GetClientIp(request).ToString();
             entry.Endpoint = request.RequestUri.AbsolutePath.ToLowerInvariant();
-            entry.ClientKey = request.Headers.Contains("Authorization-Token") 
-                ? request.Headers.GetValues("Authorization-Token").First() 
+            entry.ClientKey = request.Headers.Contains("Authorization") 
+                ? request.Headers.GetValues("Authorization").First() 
                 : "anon";
 
             return entry;

@@ -112,5 +112,15 @@ namespace WebApiThrottle
                 return this["whitelists"] as ThrottlePolicyWhitelistConfigurationCollection;
             }
         }
+
+
+        [ConfigurationProperty("warningLevel", DefaultValue = "1", IsRequired = false)]
+        public decimal WarningLevel
+        {
+            get
+            {
+                return (decimal)this["warningLevel"];
+            }
+        }
     }
 }

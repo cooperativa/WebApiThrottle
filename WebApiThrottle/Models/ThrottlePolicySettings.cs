@@ -26,5 +26,7 @@ namespace WebApiThrottle
         public bool EndpointThrottling { get; set; }
 
         public bool StackBlockedRequests { get; set; }
+
+        public decimal WarningLevel { get; set; }
     }
 }

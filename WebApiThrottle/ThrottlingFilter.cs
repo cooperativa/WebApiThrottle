@@ -196,7 +196,7 @@ namespace WebApiThrottle
                                 // log blocked request
                                 if (Logger != null)
                                 {
-                                    Logger.Log(core.ComputeLogEntry(requestId, identity, throttleCounter, rateLimitPeriod.ToString(), rateLimit, actionContext.Request));
+                                    Logger.Log(core.ComputeLogEntry(requestId, identity, throttleCounter, rateLimitPeriod.ToString(), rateLimit, policy.WarningLevel, actionContext.Request));
                                 }
 
                                 var message = !string.IsNullOrEmpty(this.QuotaExceededMessage) 

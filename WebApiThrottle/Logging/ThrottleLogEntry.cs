@@ -29,5 +29,7 @@ namespace WebApiThrottle
         public DateTime LogDate { get; set; }
 
         public HttpRequestMessage Request { get; set; }
+
+        public decimal WarningLevel { get; set; }
     }
 }

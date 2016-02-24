@@ -28,7 +28,8 @@ namespace WebApiThrottle
                 LimitPerMinute = policyConfig.LimitPerMinute,
                 LimitPerHour = policyConfig.LimitPerHour,
                 LimitPerDay = policyConfig.LimitPerDay,
-                LimitPerWeek = policyConfig.LimitPerWeek
+                LimitPerWeek = policyConfig.LimitPerWeek,
+                WarningLevel = policyConfig.WarningLevel
             };
 
             return settings;

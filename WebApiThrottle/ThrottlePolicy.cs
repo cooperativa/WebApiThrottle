@@ -21,6 +21,7 @@ namespace WebApiThrottle
             EndpointWhitelist = new List<string>();
             EndpointRules = new Dictionary<string, RateLimits>();
             Rates = new Dictionary<RateLimitPeriod, long>();
+            WarningLevel = 1;
         }
 
         /// <summary>
@@ -76,6 +77,11 @@ namespace WebApiThrottle
         public IDictionary<string, RateLimits> ClientRules { get; set; }
 
         /// <summary>
+        /// Range from 0 to 1, default is 1. If you need to get warning when you reach 70% of your limits set it to 0.7
+        /// </summary>
+        public decimal WarningLevel { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether route throttling is enabled
         /// </summary>
         public bool EndpointThrottling { get; set; }
@@ -108,6 +114,7 @@ namespace WebApiThrottle
             policy.ClientThrottling = settings.ClientThrottling;
             policy.EndpointThrottling = settings.EndpointThrottling;
             policy.StackBlockedRequests = settings.StackBlockedRequests;
+            policy.WarningLevel = settings.WarningLevel;
 
             policy.IpRules = new Dictionary<string, RateLimits>();
             policy.ClientRules = new Dictionary<string, RateLimits>();
